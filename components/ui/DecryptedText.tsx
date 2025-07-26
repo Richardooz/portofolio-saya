@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef, ReactNode } from 'react'
-import { motion, HTMLMotionProps } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const styles = {
     wrapper: {
         display: 'inline-block',
-        whiteSpace: 'pre-wrap',
+        whiteSpace: 'pre-wrap' as const,
     },
     srOnly: {
-        position: 'absolute' as 'absolute',
+        position: 'absolute' as const,
         width: '1px',
         height: '1px',
         padding: 0,
@@ -18,7 +18,7 @@ const styles = {
     },
 }
 
-interface DecryptedTextProps extends HTMLMotionProps<'span'> {
+interface DecryptedTextProps {
     text: string
     speed?: number
     maxIterations?: number
@@ -46,7 +46,6 @@ export default function DecryptedText({
     encryptedClassName = '',
     animateOn = 'hover',
     delay = 0,
-    ...props
 }: DecryptedTextProps) {
     const [displayText, setDisplayText] = useState<string>(text)
     const [isHovering, setIsHovering] = useState<boolean>(false)
@@ -211,16 +210,18 @@ export default function DecryptedText({
         }
     }, [animateOn, hasAnimated, delay])
 
-    const hoverProps =
-        animateOn === 'hover'
-            ? {
-                onMouseEnter: () => setIsHovering(true),
-                onMouseLeave: () => setIsHovering(false),
-            }
-            : {}
+    const hoverProps = animateOn === 'hover' ? {
+        onMouseEnter: () => setIsHovering(true),
+        onMouseLeave: () => setIsHovering(false),
+    } : {}
 
     return (
-        <motion.span className={parentClassName} ref={containerRef} style={styles.wrapper} {...hoverProps} {...props}>
+        <span 
+            ref={containerRef} 
+            style={styles.wrapper}
+            className={parentClassName}
+            {...hoverProps}
+        >
             <span style={styles.srOnly}>{displayText}</span>
 
             <span aria-hidden="true" className={className}>
@@ -238,6 +239,6 @@ export default function DecryptedText({
                     )
                 })}
             </span>
-        </motion.span>
+        </span>
     )
 }
