@@ -13,9 +13,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Richardo.dev - Portfolio",
+  title: {
+    default: "Richardo.dev - Portfolio",
+    template: "%s | Richardo.dev",
+  },
   description:
     "Information Systems Student & Full Stack Developer passionate about Laravel and web development",
+  keywords: [
+    "Portfolio",
+    "Web Developer",
+    "Laravel",
+    "React",
+    "Next.js",
+    "Richardo",
+  ],
+  authors: [{ name: "Richardo Danuarta" }],
+  creator: "Richardo Danuarta",
+  metadataBase: new URL("https://portofolio-saya-richardooz.vercel.app"),
+  openGraph: {
+    title: "Richardo.dev - Portfolio",
+    description:
+      "Information Systems Student & Full Stack Developer passionate about Laravel and web development",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Richardo.dev - Portfolio",
+    description:
+      "Information Systems Student & Full Stack Developer passionate about Laravel and web development",
+  },
 };
 
 export default function RootLayout({

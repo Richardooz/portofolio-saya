@@ -23,6 +23,12 @@ import CodeShowcase from "@/components/ui/CodeShowcase"
 import TiltCard from "@/components/ui/TiltCard"
 import SkillRadar from "@/components/ui/SkillRadar"
 import Timeline from "@/components/ui/Timeline"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Home - Richardo.dev",
+  description: "Welcome to Richardo's portfolio - Information Systems Student & Full Stack Developer",
+}
 
 interface Project {
   title: string
