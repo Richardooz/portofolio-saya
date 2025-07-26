@@ -8,12 +8,15 @@ const nextConfig = {
       use: {
         loader: 'file-loader',
         options: {
-          publicPath: '/_next/static/images',
-          outputPath: 'static/images/',
+          publicPath: '/_next/static/assets/',
+          outputPath: 'static/assets/',
         },
       },
     });
     return config;
+  },
+  experimental: {
+    esmExternals: false,
   },
 };
 

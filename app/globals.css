@@ -120,148 +120,88 @@
     @apply bg-background text-foreground;
   }
 }
-/* ===== CSS UNTUK LANYARD START ===== */
-.lanyard {
-  --lanyard-border-radius: 12px;
-  --lanyard-padding: 8px;
-  --lanyard-blur: 8px;
-  --lanyard-y: 24px;
-  --lanyard-z-index: 10;
-  --lanyard-item-border-radius: 8px;
-  --lanyard-item-x-padding: 12px;
-  --lanyard-item-y-padding: 8px;
-  --lanyard-item-gap: 8px;
-  --lanyard-icon-size: 20px;
-  --lanyard-icon-gap: 12px;
-}
 
-.lanyard {
-  position: fixed;
-  left: 50%;
-  top: var(--lanyard-y);
-  transform: translateX(-50%);
-  z-index: var(--lanyard-z-index);
-  padding: var(--lanyard-padding);
-  display: flex;
-  gap: var(--lanyard-item-gap);
-  border-radius: var(--lanyard-border-radius);
-  background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(var(--lanyard-blur));
-  backdrop-filter: blur(var(--lanyard-blur));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+@layer utilities {
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(24px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+  
+  @keyframes typing {
+    0% { width: 0; }
+    100% { width: 100%; }
+  }
 
-.lanyard > li {
-  list-style: none;
-}
+  @keyframes blink-caret {
+    0%, 50% { border-color: #374151; }
+    51%, 100% { border-color: transparent; }
+  }
 
-.lanyard-item {
-  display: flex;
-  align-items: center;
-  gap: var(--lanyard-icon-gap);
-  padding: var(--lanyard-item-y-padding) var(--lanyard-item-x-padding);
-  border-radius: var(--lanyard-item-border-radius);
-  color: #f8fafc;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-}
+  @keyframes slide-up {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 
-.lanyard-item-icon {
-  width: var(--lanyard-icon-size);
-  height: var(--lanyard-icon-size);
-  color: #94a3b8;
-}
+  @keyframes scale-in {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
 
-.lanyard-item.active {
-  background: rgba(255, 255, 255, 0.1);
-}
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
 
-.lanyard-item.active .lanyard-item-icon {
-  color: #f8fafc;
-}
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(14deg); }
+    20%, 40%, 60%, 80% { transform: rotate(-8deg); }
+  }
 
-.lanyard-pill {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--lanyard-border-radius);
-  background: rgba(255, 255, 255, 0.15);
-  z-index: -1;
-}
-/* ===== CSS UNTUK LANYARD END ===== */
+  .animate-fade-in {
+    animation: fade-in 0.8s cubic-bezier(0.4,0,0.2,1) both;
+  }
 
-/* ===== CSS UNTUK LANYARD START ===== */
-.lanyard {
-  --lanyard-border-radius: 12px;
-  --lanyard-padding: 8px;
-  --lanyard-blur: 8px;
-  --lanyard-y: 24px;
-  --lanyard-z-index: 50; /* Pastikan z-index tinggi */
-  --lanyard-item-border-radius: 8px;
-  --lanyard-item-x-padding: 12px;
-  --lanyard-item-y-padding: 8px;
-  --lanyard-item-gap: 8px;
-  --lanyard-icon-size: 20px;
-  --lanyard-icon-gap: 12px;
-}
+  .animate-typing {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 3px solid #374151;
+    white-space: nowrap;
+    animation: typing 3s steps(20, end) 0.5s both, blink-caret 1s step-end infinite 3.5s;
+    max-width: fit-content;
+  }
 
-.lanyard {
-  position: fixed;
-  left: 50%;
-  top: var(--lanyard-y);
-  transform: translateX(-50%);
-  z-index: var(--lanyard-z-index);
-  padding: var(--lanyard-padding);
-  display: flex;
-  gap: var(--lanyard-item-gap);
-  border-radius: var(--lanyard-border-radius);
-  background: rgba(20, 20, 20, 0.6); /* Warna lebih gelap agar kontras */
-  -webkit-backdrop-filter: blur(var(--lanyard-blur));
-  backdrop-filter: blur(var(--lanyard-blur));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+  .animate-slide-up {
+    animation: slide-up 1s ease-out both;
+  }
 
-.lanyard > li {
-  list-style: none;
-}
+  .animate-scale-in {
+    animation: scale-in 0.8s ease-out both;
+  }
 
-.lanyard-item {
-  display: flex;
-  align-items: center;
-  gap: var(--lanyard-icon-gap);
-  padding: var(--lanyard-item-y-padding) var(--lanyard-item-x-padding);
-  border-radius: var(--lanyard-item-border-radius);
-  color: #f8fafc;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-}
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
 
-.lanyard-item-icon {
-  width: var(--lanyard-icon-size);
-  height: var(--lanyard-icon-size);
-  color: #94a3b8;
-}
+  .animate-wave {
+    animation: wave 2s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
+  }
 
-.lanyard-item.active {
-  background: rgba(255, 255, 255, 0.05);
-}
+  .animate-wave:hover {
+    animation: wave 0.5s ease-in-out infinite;
+  }
 
-.lanyard-item.active .lanyard-item-icon {
-  color: #f8fafc;
-}
+  .animation-delay-1s {
+    animation-delay: 1s;
+  }
 
-.lanyard-pill {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--lanyard-item-border-radius);
-  background: rgba(255, 255, 255, 0.1);
-  z-index: -1;
+  .animation-delay-2s {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-3s {
+    animation-delay: 3s;
+  }
 }
-/* ===== CSS UNTUK LANYARD END ===== */
