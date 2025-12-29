@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, Mail, Phone, MapPin, Github, Home, Linkedin } from "lucide-react"
 import Image from "next/image"
@@ -23,29 +23,54 @@ import CodeShowcase from "@/components/ui/CodeShowcase"
 import TiltCard from "@/components/ui/TiltCard"
 import SkillRadar from "@/components/ui/SkillRadar"
 import Timeline from "@/components/ui/Timeline"
-import { Metadata } from "next"
 
-export const metadata: Metadata = {
-  title: "Home - Richardo.dev",
-  description: "Welcome to Richardo's portfolio - Information Systems Student & Full Stack Developer",
-}
+import {
+  DEFAULT_HERO_IMAGE,
+  DEFAULT_PROJECTS,
+  type PortfolioProject,
+} from "@/lib/portfolioDefaults"
 
-interface Project {
-  title: string
-  year: string
-  description: string
-  image: string
-  technologies: string[]
-  link?: string
-  features?: string[]
-  challenges?: string
-  solution?: string
-}
 
 export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [heroImage, setHeroImage] = useState(DEFAULT_HERO_IMAGE)
+  const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PROJECTS)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function load() {
+      try {
+        const [projectsRes, settingsRes] = await Promise.all([
+          fetch("/api/public/projects", { cache: "no-store" }),
+          fetch("/api/public/settings", { cache: "no-store" }),
+        ])
+
+        if (projectsRes.ok) {
+          const data = (await projectsRes.json()) as { projects?: PortfolioProject[] }
+          if (!cancelled && Array.isArray(data.projects) && data.projects.length > 0) {
+            setProjects(data.projects)
+          }
+        }
+
+        if (settingsRes.ok) {
+          const data = (await settingsRes.json()) as { settings?: { heroImage?: string | null } | null }
+          const nextHero = data.settings?.heroImage
+          if (!cancelled && nextHero) setHeroImage(nextHero)
+        }
+      } catch {
+        // ignore: fallback to defaults
+      }
+    }
+
+    void load()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const skills = [
     "HTML",
@@ -66,60 +91,6 @@ export default function Portfolio() {
     "phpMyAdmin",
   ]
 
-  const projects = [
-    {
-      title: "ElectRIC",
-      year: "2024",
-      description: "Designed and developed a full-featured e-commerce platform for electronic goods with product catalog, shopping cart, and payment integration to enhance customer experience.",
-      image: "/electric.png",
-      technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "Tailwind CSS", "Bootstrap"],
-      features: [
-        "Product catalog with advanced filtering",
-        "Shopping cart and wishlist functionality", 
-        "Secure payment gateway integration",
-        "Admin dashboard for inventory management",
-        "Order tracking system"
-      ],
-      challenges: "Building a scalable e-commerce platform with complex product variations and inventory management.",
-      solution: "Implemented a flexible product attribute system and optimized database queries for better performance."
-    },
-    {
-      title: "Florist",
-      year: "2024",
-      description: "Designed and developed a responsive online florist shop with beautiful product gallery and integrated order management system to streamline flower delivery services.",
-      image: "/forist.png",
-      technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "Bootstrap"],
-    },
-    {
-      title: "SIAKAD",
-      year: "2024 - 2025",
-      description: "Designed and developed an academic information system to manage student data, course schedules, and grades with role-based access control for different user types.",
-      image: "/Siakad.png",
-      technologies: ["Laravel", "JavaScript", "MySQL", "Git", "Tailwind CSS"],
-    },
-    {
-      title: "System Information Nongsa Bakau Serip Village ",
-      year: "2025",
-      description: "Designed and developed a village information system that digitizes community data, manages local news, and improves public service delivery for better community engagement.",
-      image: "/Desa.png",
-      technologies: ["Laravel", "PHP", "MySQL", "Figma", "JavaScript"],
-    },
-    {
-      title: "Aplikasi Uang Kas - Wangkas",
-      year: "2025",
-      description: "Developed a comprehensive school cash management system that tracks student fee payments, generates financial reports, and manages class treasury funds. Features automated payment reminders, transaction history, and role-based access for teachers and administrators.",
-      image: "/uangkas.png",
-      technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "Bootstrap", "Blade"],
-    },
-    {
-      title: "Gor Centaury",
-      year: "2025",
-      description: "Developed an online futsal field booking system for Gor Centaury, enabling users to check availability, reserve time slots, and manage bookings efficiently. The platform streamlines the reservation process and improves customer experience.",
-      image: "/booking-futsal.png",
-      technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "Bootstrap"],
-      link: "https://gorcentury.online",
-    },
-  ]
 
   const education = [
     {
@@ -190,7 +161,7 @@ export default function Portfolio() {
     }
   ]
 
-  const openProjectModal = (project: Project) => {
+  const openProjectModal = (project: PortfolioProject) => {
     setSelectedProject(project)
     setIsModalOpen(true)
   }
@@ -288,7 +259,7 @@ export default function Portfolio() {
             <div className="flex justify-center lg:justify-end">
               <div className="w-48 h-48 bg-gray-100 rounded-lg overflow-hidden animate-scale-in animation-delay-1s">
                 <Image
-                  src="/laptop.jpeg.jpg"
+                  src={heroImage || DEFAULT_HERO_IMAGE}
                   alt="Richardo's workspace"
                   width={200}
                   height={200}

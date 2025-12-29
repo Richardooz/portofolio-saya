@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { getSiteUrlObject } from "@/lib/siteUrl";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Richardo Danuarta" }],
   creator: "Richardo Danuarta",
-  metadataBase: new URL("https://portofolio-saya-richardooz.vercel.app"),
+  metadataBase: getSiteUrlObject(),
   openGraph: {
     title: "Richardo.dev - Portfolio",
     description:

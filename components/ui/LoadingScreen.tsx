@@ -4,10 +4,13 @@ import { useState, useEffect } from "react"
 import DecryptedText from "./DecryptedText"
 
 export default function LoadingScreen() {
+  const [mounted, setMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    setMounted(true)
+
     const timer = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -19,10 +22,19 @@ export default function LoadingScreen() {
       })
     }, 200)
 
-    return () => clearInterval(timer)
+    const hardStop = setTimeout(() => {
+      setProgress(100)
+      setIsLoading(false)
+    }, 6000)
+
+    return () => {
+      clearInterval(timer)
+      clearTimeout(hardStop)
+    }
   }, [])
 
-  if (!isLoading) return null
+  // If hydration never happens, don't block the UI.
+  if (!mounted || !isLoading) return null
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">

@@ -4,21 +4,12 @@ import { useState } from "react"
 import { X, ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-
-interface Project {
-  title: string
-  year: string
-  description: string
-  image: string
-  technologies: string[]
-  link?: string
-  features?: string[]
-  challenges?: string
-  solution?: string
-}
+import Link from "next/link"
+import type { PortfolioProject } from "@/lib/portfolioDefaults"
+import { projectToSlug } from "@/lib/projectSlug"
 
 interface ProjectModalProps {
-  project: Project | null
+  project: PortfolioProject | null
   isOpen: boolean
   onClose: () => void
 }
@@ -91,6 +82,11 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
             )}
             
             <div className="flex gap-4">
+              <Link href={`/projects/${projectToSlug(project)}`}>
+                <Button variant="outline" className="cursor-target" onClick={onClose}>
+                  Case Study
+                </Button>
+              </Link>
               {project.link && (
                 <a href={project.link} target="_blank" rel="noopener noreferrer">
                   <Button className="cursor-target">
