@@ -1,7 +1,7 @@
 export const runtime = "nodejs"
 
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { deleteProject, getProjectById, updateProject } from "@/lib/filePortfolioStore"
 import { isAdminAuthenticated } from "@/lib/requireAdmin"
 
 export const dynamic = "force-dynamic"
@@ -40,7 +40,7 @@ export async function GET(
 
   const { id } = await context.params
 
-  const project = await prisma.project.findUnique({ where: { id } })
+  const project = await getProjectById(id)
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   return NextResponse.json({
@@ -89,22 +89,21 @@ export async function PATCH(
     )
   }
 
-  const updated = await prisma.project.update({
-    where: { id },
-    data: {
-      title: body?.title?.trim(),
-      year: body?.year?.trim(),
-      description: body?.description?.trim(),
-      image: normalizedImage === undefined ? undefined : normalizedImage,
-      technologies: body?.technologies ? normalizeStringArray(body.technologies) : undefined,
-      link: body?.link === undefined ? undefined : body.link?.trim() || null,
-      features: body?.features ? normalizeStringArray(body.features) : undefined,
-      challenges: body?.challenges === undefined ? undefined : body.challenges?.trim() || null,
-      solution: body?.solution === undefined ? undefined : body.solution?.trim() || null,
-      published: body?.published,
-      sortOrder: body?.sortOrder,
-    },
+  const updated = await updateProject(id, {
+    title: body?.title === undefined ? undefined : body.title,
+    year: body?.year === undefined ? undefined : body.year,
+    description: body?.description === undefined ? undefined : body.description,
+    image: normalizedImage === undefined ? undefined : normalizedImage,
+    technologies: body?.technologies ? normalizeStringArray(body.technologies) : undefined,
+    link: body?.link === undefined ? undefined : body.link?.trim() || "",
+    features: body?.features ? normalizeStringArray(body.features) : undefined,
+    challenges: body?.challenges === undefined ? undefined : body.challenges?.trim() || "",
+    solution: body?.solution === undefined ? undefined : body.solution?.trim() || "",
+    published: body?.published,
+    sortOrder: body?.sortOrder,
   })
+
+  if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   return NextResponse.json({
     project: {
@@ -125,6 +124,8 @@ export async function DELETE(
 
   const { id } = await context.params
 
-  await prisma.project.delete({ where: { id } })
+  const ok = await deleteProject(id)
+  if (!ok) return NextResponse.json({ error: "Not found" }, { status: 404 })
+
   return NextResponse.json({ ok: true })
 }

@@ -1,7 +1,7 @@
 export const runtime = "nodejs"
 
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { getSettings, setHeroImage } from "@/lib/filePortfolioStore"
 import { isAdminAuthenticated } from "@/lib/requireAdmin"
 
 export const dynamic = "force-dynamic"
@@ -29,8 +29,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const settings = await prisma.siteSettings.findUnique({ where: { key: "site" } })
-
+  const settings = await getSettings()
   return NextResponse.json({ settings })
 }
 
@@ -52,11 +51,7 @@ export async function PUT(req: Request) {
     )
   }
 
-  const settings = await prisma.siteSettings.upsert({
-    where: { key: "site" },
-    update: { heroImage: heroImage || null },
-    create: { key: "site", heroImage: heroImage || null },
-  })
+  const settings = await setHeroImage(heroImage || null)
 
   return NextResponse.json({ settings })
 }

@@ -1,7 +1,7 @@
 export const runtime = "nodejs"
 
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { listProjects } from "@/lib/filePortfolioStore"
 
 export const dynamic = "force-dynamic"
 
@@ -12,10 +12,7 @@ function normalizeStringArray(value: unknown): string[] {
 }
 
 export async function GET() {
-  const projects = await prisma.project.findMany({
-    where: { published: true },
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-  })
+  const projects = await listProjects({ publishedOnly: true })
 
   return NextResponse.json({
     projects: projects.map((p) => ({

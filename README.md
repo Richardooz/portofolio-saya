@@ -33,22 +33,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### Environment variables (Supabase)
+### Environment variables
 
-This project uses Prisma with PostgreSQL (recommended: Supabase) for persistent admin/CRUD data.
+This project is **no-database** by default.
 
-1) Create a Supabase project
-2) Copy a Postgres connection string from Supabase (Settings  Database  Connection string)
-3) In Vercel: Project  Settings  Environment Variables, add:
+- Admin CRUD (local) stores data in `data/portfolio.json`.
+- When you deploy to Vercel, the site uses whatever is committed in `data/portfolio.json`.
 
-- `DATABASE_URL`  Supabase Postgres URL (prefer pooled/transaction URL for serverless)
-- `DIRECT_URL`  Supabase direct URL (recommended for `prisma migrate deploy`)
+In Vercel: Project  Settings  Environment Variables, add:
+
+- `NEXT_PUBLIC_SITE_URL` (your Vercel URL, e.g. `https://your-app.vercel.app`)
 - `ADMIN_USERNAME`
 - `ADMIN_PASSWORD`
 - `ADMIN_SESSION_SECRET` (long random string)
-- `NEXT_PUBLIC_SITE_URL` (your Vercel URL, e.g. `https://your-app.vercel.app`)
-
-After saving env vars, redeploy the latest deployment.
 
 For local development, copy `.env.example`  `.env.local` and fill values.
 

@@ -1,7 +1,7 @@
 export const runtime = "nodejs"
 
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { createProject, listProjects } from "@/lib/filePortfolioStore"
 import { isAdminAuthenticated } from "@/lib/requireAdmin"
 
 export const dynamic = "force-dynamic"
@@ -35,15 +35,16 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const projects = await prisma.project.findMany({
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-  })
+  const projects = await listProjects()
 
   return NextResponse.json({
     projects: projects.map((p) => ({
       ...p,
       technologies: normalizeStringArray(p.technologies),
       features: normalizeStringArray(p.features),
+      link: p.link || null,
+      challenges: p.challenges || null,
+      solution: p.solution || null,
     })),
   })
 }
@@ -92,20 +93,18 @@ export async function POST(req: Request) {
     )
   }
 
-  const project = await prisma.project.create({
-    data: {
-      title,
-      year,
-      description,
-      image,
-      technologies,
-      link: body?.link?.trim() || null,
-      features: normalizeStringArray(body?.features),
-      challenges: body?.challenges?.trim() || null,
-      solution: body?.solution?.trim() || null,
-      published: body?.published ?? true,
-      sortOrder: Number.isFinite(body?.sortOrder) ? (body?.sortOrder as number) : 0,
-    },
+  const project = await createProject({
+    title,
+    year,
+    description,
+    image,
+    technologies,
+    link: body?.link?.trim() || "",
+    features: normalizeStringArray(body?.features),
+    challenges: body?.challenges?.trim() || "",
+    solution: body?.solution?.trim() || "",
+    published: body?.published ?? true,
+    sortOrder: Number.isFinite(body?.sortOrder) ? (body?.sortOrder as number) : 0,
   })
 
   return NextResponse.json({

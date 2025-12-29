@@ -1,11 +1,11 @@
 export const runtime = "nodejs"
 
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { getSettings } from "@/lib/filePortfolioStore"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
-  const settings = await prisma.siteSettings.findUnique({ where: { key: "site" } })
+  const settings = await getSettings()
   return NextResponse.json({ settings })
 }
