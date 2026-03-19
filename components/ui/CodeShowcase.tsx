@@ -13,36 +13,73 @@ export default function CodeShowcase() {
       language: "Laravel",
       code: `<?php
 
-class UserController extends Controller
+class ProjectController extends Controller
 {
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-        ]);
+        $query = Project::query()->where('published', true);
 
-        return User::create($validated);
+        if ($request->filled('tech')) {
+            $query->whereJsonContains('technologies', $request->string('tech'));
+        }
+
+        return response()->json([
+            'projects' => $query->latest()->get(),
+        ]);
     }
 }`
     },
     {
+      language: "Python AI",
+      code: `import tensorflow as tf
+from tensorflow.keras import layers
+
+def build_tb_classifier(input_shape=(224, 224, 3)):
+    base = tf.keras.applications.EfficientNetB0(
+        include_top=False,
+        input_shape=input_shape,
+        weights="imagenet"
+    )
+    base.trainable = False
+
+    model = tf.keras.Sequential([
+        layers.Input(shape=input_shape),
+        base,
+        layers.GlobalAveragePooling2D(),
+        layers.Dropout(0.3),
+        layers.Dense(1, activation="sigmoid")
+    ])
+
+    model.compile(
+        optimizer="adam",
+        loss="binary_crossentropy",
+        metrics=["accuracy", tf.keras.metrics.AUC(name="auc")]
+    )
+
+    return model`
+    },
+    {
       language: "React",
       code: `const Portfolio = () => {
-  const [projects, setProjects] = useState([]);
-  
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    fetchProjects().then(setProjects);
-  }, []);
+    fetch("/api/public/projects")
+      .then((res) => res.json())
+      .then((data) => setProjects(data.projects ?? []))
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <div className="portfolio">
+      {loading && <p>Loading projects...</p>}
       {projects.map(project => (
         <ProjectCard key={project.id} {...project} />
       ))}
     </div>
-  );
-};`
+  )
+}`
     }
   ]
 

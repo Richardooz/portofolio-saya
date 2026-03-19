@@ -204,4 +204,33 @@
   .animation-delay-3s {
     animation-delay: 3s;
   }
+
+  .mesh-gradient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 15%, color-mix(in oklab, #64748b 10%, transparent) 0 20%, transparent 56%),
+      radial-gradient(circle at 85% 12%, color-mix(in oklab, #94a3b8 10%, transparent) 0 18%, transparent 54%);
+    opacity: 0.55;
+  }
+
+  .dark .mesh-gradient {
+    background:
+      radial-gradient(circle at 20% 15%, color-mix(in oklab, #475569 18%, transparent) 0 22%, transparent 58%),
+      radial-gradient(circle at 82% 16%, color-mix(in oklab, #334155 16%, transparent) 0 20%, transparent 56%);
+    opacity: 0.45;
+  }
+
+  .glass-card {
+    border: 1px solid color-mix(in oklab, #cbd5e1 42%, transparent);
+    background: color-mix(in oklab, white 90%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .dark .glass-card {
+    border-color: color-mix(in oklab, #475569 35%, transparent);
+    background: color-mix(in oklab, #0f172a 65%, transparent);
+  }
 }

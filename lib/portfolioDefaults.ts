@@ -13,7 +13,7 @@ export type PortfolioProject = {
   sortOrder?: number
 }
 
-export const DEFAULT_HERO_IMAGE = "/laptop.jpeg.jpg"
+export const DEFAULT_HERO_IMAGE = "/fotodiri.jpg"
 
 export const DEFAULT_PROJECTS: PortfolioProject[] = [
   {

@@ -2,9 +2,69 @@
   "version": 1,
   "settings": {
     "key": "site",
-    "heroImage": "/laptop.jpeg.jpg"
+    "heroImage": "/fotodiri.jpg"
   },
   "projects": [
+    {
+      "id": "tb-screening-cnn",
+      "title": "Sistem Skrining Tuberkulosis (CNN + Grad-CAM)",
+      "year": "2026",
+      "description": "Developed an end-to-end, web-based diagnostic tool to classify Chest X-Ray images for Tuberculosis screening using Convolutional Neural Networks (CNN) with explainable AI visualization.",
+      "image": "/tb-screening.png",
+      "technologies": [
+        "Python",
+        "TensorFlow",
+        "CNN",
+        "Transfer Learning",
+        "Grad-CAM",
+        "Flask",
+        "Bootstrap"
+      ],
+      "link": "",
+      "features": [
+        "End-to-end web workflow from X-Ray upload to TB/Normal prediction",
+        "Transfer learning pipeline trained on 4,200 Kaggle chest X-ray images",
+        "Class imbalance handling for 700 TB vs 3,500 Normal cases",
+        "Grad-CAM heatmap visualization for model explainability",
+        "Interactive interface for medical screening support"
+      ],
+      "challenges": "The main challenge was model bias risk due to significant class imbalance and ensuring predictions were interpretable for non-technical users.",
+      "solution": "Applied transfer learning with class-weighted training and robust validation strategy, then integrated Grad-CAM overlays in a Flask-based web app so clinicians can inspect regions influencing predictions.",
+      "published": true,
+      "sortOrder": -1
+    },
+    {
+      "id": "pawspital",
+      "title": "Pawspital - Manajemen Operasional Klinik Hewan",
+      "year": "2025 - 2026",
+      "description": "Full-stack veterinary clinic management platform designed to digitalize pet owner registration, doctor consultations, medical records, prescription management, and educational content delivery with multi-role access control.",
+      "image": "/pawspital.png",
+      "technologies": [
+        "Laravel 11",
+        "PHP 8.2",
+        "React",
+        "Inertia.js",
+        "Vite",
+        "MySQL",
+        "Tailwind CSS",
+        "DaisyUI"
+      ],
+      "link": "",
+      "features": [
+        "Multi-role authentication & authorization (Admin, Doctor, Author, User)",
+        "Patient registration: pet owner & animal information management",
+        "Medical records workflow: consultation scheduling, diagnosis, examination status",
+        "Prescription system: doctors generate prescriptions linked to inventory stock",
+        "CMS module: article authoring, categorization, public-facing blog",
+        "Master data management: animal types, specializations, inventory categories",
+        "Role-specific dashboards: operational insights for admin and doctors",
+        "End-to-end healthcare business process digitalization"
+      ],
+      "challenges": "Designing a complex RBAC system that balances multiple stakeholder workflows (admin operations, doctor medical decisions, author content, user interactions) while ensuring data integrity across interconnected modules.",
+      "solution": "Implemented Laravel's authorization gates & policies, structured Inertia.js components per-role, established clear data boundaries via Eloquent relationships, and created unified UX patterns across CMS, medical, and inventory modules.",
+      "published": true,
+      "sortOrder": -2
+    },
     {
       "id": "electric",
       "title": "ElectRIC",

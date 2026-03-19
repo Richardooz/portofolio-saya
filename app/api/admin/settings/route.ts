@@ -17,7 +17,19 @@ function normalizeImageInput(input: string) {
     return after.startsWith("/") ? after : `/${after}`
   }
 
-  return normalized
+  if (normalized.startsWith("./")) {
+    return `/${normalized.slice(2)}`
+  }
+
+  if (
+    normalized.startsWith("/") ||
+    normalized.startsWith("http://") ||
+    normalized.startsWith("https://")
+  ) {
+    return normalized
+  }
+
+  return `/${normalized}`
 }
 
 function isValidNextImageSrc(value: string) {
